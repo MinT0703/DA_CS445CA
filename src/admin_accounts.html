@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Quản lý Tài khoản - BestFood (Admin)</title>
+
+  <!-- icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- project stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+
+  <style>
+    /* --- page-specific styles (kept from previous version) --- */
+    .admin-container { max-width: 1200px; margin: 22px auto; padding: 0 20px 40px; display:grid; grid-template-columns: 260px 1fr; gap:18px; align-items:start; }
+    .card-panel { background:#fff; border-radius:12px; padding:16px; box-shadow: var(--shadow); }
+    .page-title { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .search { flex:1; display:flex; gap:8px; align-items:center; }
+    .search input { width:100%; padding:10px 12px; border-radius:10px; border:1px solid #eee; }
+    .table-wrap { overflow:auto; }
+    table.admin-table { width:100%; border-collapse:collapse; min-width:820px;}
+    table.admin-table th, table.admin-table td { padding:12px 14px; border-bottom:1px solid #f3f4f6; text-align:left; vertical-align:middle; }
+    table.admin-table th { background:#f6f8f9; color:#6b7280; font-weight:700; text-transform:uppercase; font-size:13px; }
+    .avatar { width:44px; height:44px; border-radius:8px; object-fit:cover; margin-right:10px; }
+    .name-cell { display:flex; align-items:center; gap:10px; }
+    .pill-admin { background:#e74c3c; color:#fff; padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px; display:inline-block; }
+    .pill-manager { background:#f39c12; color:#fff; padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px; display:inline-block; }
+    .pill-customer { background:#2ecc71; color:#fff; padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px; display:inline-block; }
+    .actions button { border:0; background:transparent; cursor:pointer; padding:6px; border-radius:8px; }
+    .actions button:hover { background:#f3f4f6; }
+    .pagination { display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:10px; }
+    .page-btn { padding:8px 10px; border-radius:8px; border:1px solid #eee; background:#fff; cursor:pointer; }
+    .page-btn.active { background:var(--primary-color); color:#fff; border-color:var(--primary-color); }
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; z-index:80; }
+    .modal { width:640px; max-width:95%; background:#fff; border-radius:12px; padding:18px; box-shadow:var(--shadow); }
+    .modal .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .modal .group input, .modal .group select { width:100%; padding:10px; border-radius:8px; border:1px solid #eee; }
+    @media (max-width:900px) {
+      .admin-container { grid-template-columns: 1fr; }
+      .table-wrap { overflow:auto; }
+    }
+
+    /* --- nếu bạn chưa thêm CSS sidebar chung vào style.css, phần này đảm bảo sidebar khớp --- */
+    .admin-sidebar-common {
+      width: 260px;
+      background: linear-gradient(180deg,#2f3f49,#2b3943);
+      color: #e6f2f6;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(20,37,48,0.12);
+      box-sizing: border-box;
+      height: calc(100vh - 100px);
+      position: sticky;
+      top: 80px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      overflow:hidden;
+      transition: all .18s ease;
+    }
+    .admin-sidebar-common .admin-sidebar-inner { display:flex; flex-direction:column; height:100%; }
+    .sidebar-title { margin: 0 0 12px 0; color:#f3fafc; font-size:18px; font-weight:800; }
+    .sidebar-nav { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+    .sidebar-nav .nav-link { display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; color: #cfe6ea; text-decoration:none; font-weight:600; transition: background .12s ease, transform .06s ease; }
+    .sidebar-nav .nav-link i { width:28px; text-align:center; font-size:16px; color: #b7d6db; }
+    .sidebar-nav .nav-link span { font-size:15px; }
+    .sidebar-nav .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; transform: translateY(-1px); }
+    .sidebar-nav .nav-link.active, .sidebar-nav .nav-link.active:hover {
+      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      color: #ffffff;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.03);
+    }
+    .sidebar-footer { margin-top: auto; color:#9fb0b9; font-size:13px; }
+    .sidebar-footer hr { border:0; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- header (reuse project header) -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">Best<span>Food</span></div>
+      <nav class="nav" id="nav">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <a href="admin_accounts.html">Tài Khoản</a>
+        <a href="admin_menu.html">Món Ăn</a>
+        <a href="admin_orders.html">Đơn Hàng</a>
+        <a href="admin_promos.html">Voucher</a>
+        <a href="login.html">Đăng xuất</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- ===== shared admin sidebar (đã đồng bộ giống admin_dashboard) ===== -->
+    <aside class="admin-sidebar-common" aria-label="Admin sidebar">
+      <div class="admin-sidebar-inner">
+        <div>
+          <h3 class="sidebar-title">Quản trị</h3>
+
+          <nav class="sidebar-nav" role="navigation">
+            <a href="admin_dashboard.html" class="nav-link" data-key="dashboard">
+              <i class="fa fa-chart-line"></i><span>Dashboard</span>
+            </a>
+
+            <a href="admin_accounts.html" class="nav-link" data-key="accounts">
+              <i class="fa fa-users"></i><span>Quản lý Tài khoản</span>
+            </a>
+
+            <a href="admin_menu.html" class="nav-link" data-key="menu">
+              <i class="fa fa-utensils"></i><span>Quản lý Món ăn</span>
+            </a>
+
+            <a href="admin_orders.html" class="nav-link" data-key="orders">
+              <i class="fa fa-receipt"></i><span>Quản lý Đơn hàng</span>
+            </a>
+
+            <a href="admin_promos.html" class="nav-link" data-key="promos">
+              <i class="fa fa-tag"></i><span>Quản lý Khuyến mãi</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="sidebar-footer">
+          <hr>
+          <div class="greeting">Xin chào, Admin</div>
+        </div>
+      </div>
+    </aside>
+    <!-- ===== end shared sidebar ===== -->
+
+    <!-- MAIN -->
+    <section class="main">
+      <div class="card-panel page-title">
+        <div>
+          <h2 style="margin:0">Quản lý Tài khoản & Phân quyền</h2>
+          <div class="muted small">Quản lý danh sách người dùng, phân quyền và các thao tác admin.</div>
+        </div>
+
+        <div class="controls">
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="btnExport" class="btn btn-small" title="Xuất CSV"><i class="fa fa-file-csv"></i> Xuất CSV</button>
+            <button id="btnAdd" class="btn btn-small" style="background:var(--primary-color);color:#fff;"><i class="fa fa-plus"></i> Thêm tài khoản</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div class="search" style="min-width:260px;">
+            <input id="q" placeholder="Tìm tên hoặc email..." />
+            <button id="btnSearch" class="btn btn-small"><i class="fa fa-search"></i></button>
+          </div>
+
+          <div>
+            <select id="filterRole" style="padding:10px;border-radius:8px;border:1px solid #eee">
+              <option value="">Tất cả vai trò</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Quản lý</option>
+              <option value="customer">Khách hàng</option>
+            </select>
+          </div>
+
+          <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+            <div class="muted small">Hiển thị</div>
+            <select id="pageSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
+              <option value="5">5</option><option value="10" selected>10</option><option value="20">20</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-top:12px">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên người dùng</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Ngày tạo</th>
+                <th style="width:120px">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalRoot" style="display:none"></div>
+
+  <script>
+    (function() {
+      const path = location.pathname.split('/').pop().toLowerCase() || 'admin_dashboard.html';
+      const map = {
+        'admin_dashboard.html': 'dashboard',
+        'admin_accounts.html': 'accounts',
+        'admin_menu.html': 'menu',
+        'admin_orders.html': 'orders',
+        'admin_promos.html': 'promos'
+      };
+      const key = map[path] || Object.keys(map).find(k => path.includes(k)) || 'dashboard';
+      document.querySelectorAll('.admin-sidebar-common .nav-link').forEach(a=>{
+        a.classList.toggle('active', a.dataset.key === key);
+      });
+    })();
+  </script>
+
+</body>
+</html>
