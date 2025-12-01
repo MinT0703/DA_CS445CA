@@ -41,38 +41,13 @@
       .table-wrap { overflow:auto; }
     }
 
-    /* --- nếu bạn chưa thêm CSS sidebar chung vào style.css, phần này đảm bảo sidebar khớp --- */
-    .admin-sidebar-common {
-      width: 260px;
-      background: linear-gradient(180deg,#2f3f49,#2b3943);
-      color: #e6f2f6;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 8px 22px rgba(20,37,48,0.12);
-      box-sizing: border-box;
-      height: calc(100vh - 100px);
-      position: sticky;
-      top: 80px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      overflow:hidden;
-      transition: all .18s ease;
+     .admin-sidebar {
+      background:#2f3f49; color:#fff; border-radius:12px; padding:18px; height:calc(100vh - 120px); position:sticky; top:80px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
     }
-    .admin-sidebar-common .admin-sidebar-inner { display:flex; flex-direction:column; height:100%; }
     .sidebar-title { margin: 0 0 12px 0; color:#f3fafc; font-size:18px; font-weight:800; }
-    .sidebar-nav { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
-    .sidebar-nav .nav-link { display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; color: #cfe6ea; text-decoration:none; font-weight:600; transition: background .12s ease, transform .06s ease; }
-    .sidebar-nav .nav-link i { width:28px; text-align:center; font-size:16px; color: #b7d6db; }
-    .sidebar-nav .nav-link span { font-size:15px; }
-    .sidebar-nav .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; transform: translateY(-1px); }
-    .sidebar-nav .nav-link.active, .sidebar-nav .nav-link.active:hover {
-      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      color: #ffffff;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.03);
-    }
-    .sidebar-footer { margin-top: auto; color:#9fb0b9; font-size:13px; }
-    .sidebar-footer hr { border:0; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0; }
+    .admin-sidebar a { display:flex; gap:10px; align-items:center; color:#cbd8de; padding:8px 10px; border-radius:8px; text-decoration:none; margin-bottom:6px; }
+    .admin-sidebar a.active, .admin-sidebar a:hover { background: rgba(255,255,255,0.04); color:#fff; }
   </style>
 </head>
 <body>
@@ -94,42 +69,15 @@
 
   <main class="admin-container">
 
-    <!-- ===== shared admin sidebar (đã đồng bộ giống admin_dashboard) ===== -->
-    <aside class="admin-sidebar-common" aria-label="Admin sidebar">
-      <div class="admin-sidebar-inner">
-        <div>
-          <h3 class="sidebar-title">Quản trị</h3>
-
-          <nav class="sidebar-nav" role="navigation">
-            <a href="admin_dashboard.html" class="nav-link" data-key="dashboard">
-              <i class="fa fa-chart-line"></i><span>Dashboard</span>
-            </a>
-
-            <a href="admin_accounts.html" class="nav-link" data-key="accounts">
-              <i class="fa fa-users"></i><span>Quản lý Tài khoản</span>
-            </a>
-
-            <a href="admin_menu.html" class="nav-link" data-key="menu">
-              <i class="fa fa-utensils"></i><span>Quản lý Món ăn</span>
-            </a>
-
-            <a href="admin_orders.html" class="nav-link" data-key="orders">
-              <i class="fa fa-receipt"></i><span>Quản lý Đơn hàng</span>
-            </a>
-
-            <a href="admin_promos.html" class="nav-link" data-key="promos">
-              <i class="fa fa-tag"></i><span>Quản lý Khuyến mãi</span>
-            </a>
-          </nav>
-        </div>
-
-        <div class="sidebar-footer">
-          <hr>
-          <div class="greeting">Xin chào, Admin</div>
-        </div>
-      </div>
+    <aside class="admin-sidebar" aria-label="Admin sidebar">
+      <h3 class="sidebar-title">Quản trị</h3>
+      <a href="admin_dashboard.html" ><i class="fas fa-chart-line"></i> Dashboard</a>
+      <a href="admin_accounts.html" class="active"><i class="fas fa-users"></i> Quản lý Tài khoản</a>
+      <a href="admin_menu.html"><i class="fas fa-utensils"></i> Quản lý Món ăn</a>
+      <a href="admin_orders.html"><i class="fas fa-receipt"></i> Quản lý Đơn hàng</a>
+      <a href="admin_promos.html"><i class="fas fa-tag"></i> Quản lý Khuyến mãi</a>
+      <hr style="border-color: rgba(255,255,255,.04); margin:12px 0">
     </aside>
-    <!-- ===== end shared sidebar ===== -->
 
     <!-- MAIN -->
     <section class="main">

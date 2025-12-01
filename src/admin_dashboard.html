@@ -19,7 +19,7 @@
       background:#2f3f49; color:#fff; border-radius:12px; padding:18px; height:calc(100vh - 120px); position:sticky; top:80px;
       box-shadow: 0 6px 18px rgba(0,0,0,.08);
     }
-    .admin-sidebar h4 { color:#fff; margin-bottom:12px; }
+    .sidebar-title { margin: 0 0 12px 0; color:#f3fafc; font-size:18px; font-weight:800; }
     .admin-sidebar a { display:flex; gap:10px; align-items:center; color:#cbd8de; padding:8px 10px; border-radius:8px; text-decoration:none; margin-bottom:6px; }
     .admin-sidebar a.active, .admin-sidebar a:hover { background: rgba(255,255,255,0.04); color:#fff; }
     .admin-main { display:flex; flex-direction:column; gap:18px; }
@@ -68,14 +68,13 @@
   <main class="admin-wrap">
     <!-- SIDEBAR -->
     <aside class="admin-sidebar" aria-label="Admin sidebar">
-      <h4>Quản trị</h4>
+      <h3 class="sidebar-title">Quản trị</h3>
       <a href="admin_dashboard.html" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
       <a href="admin_accounts.html"><i class="fas fa-users"></i> Quản lý Tài khoản</a>
       <a href="admin_menu.html"><i class="fas fa-utensils"></i> Quản lý Món ăn</a>
       <a href="admin_orders.html"><i class="fas fa-receipt"></i> Quản lý Đơn hàng</a>
       <a href="admin_promos.html"><i class="fas fa-tag"></i> Quản lý Khuyến mãi</a>
       <hr style="border-color: rgba(255,255,255,.04); margin:12px 0">
-      <div style="font-size:13px; color:#9fb0b9">Xin chào, Admin</div>
     </aside>
 
     <!-- MAIN -->
